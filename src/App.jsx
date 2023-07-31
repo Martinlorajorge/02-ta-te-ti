@@ -1,8 +1,9 @@
 import { useState } from "react";
 import confetti from "canvas-confetti";
 import { Square } from "./components/Square"
-import { TURNS, WINNER_COMBOS } from "./constants";
+import { TURNS } from "./constants";
 import { WinnerModal } from "./components/WinnerModal";
+import { checkWinnerFrom, checkEndGame } from "./logic/board";
 
 export default App;
 
@@ -15,21 +16,7 @@ function App() {
 	//null es que no hay ganador, false es que hay un empate
 	const [winner, setWinner] = useState(null);
 
-	const checkWinner = boardToCheck => {
-		//revisa todas las combinaciones ganadoras
-		//para ver si X u O ganó
-		for (const combo of WINNER_COMBOS) {
-			const [a, b, c] = combo;
-			if (
-				boardToCheck[a] &&
-				boardToCheck[a] === boardToCheck[b] &&
-				boardToCheck[a] === boardToCheck[c]
-			) {
-				return boardToCheck[a];
-			}
-		}
-		return null;
-	};
+
 
 	const resetGame = () => {
 		setBoard(Array(9).fill(null));
@@ -37,12 +24,7 @@ function App() {
 		setWinner(null);
 	};
 
-	const checkEndGame = (newBoard) => {
-		//revisamos si no hay empate
-		// si no hay espacios vacíos
-		//en el tablero
-		return newBoard.every((square) => square !== null)
-	}
+
 
 	const updateBoard = index => {
 		//no actualizamos esta posicion
@@ -56,7 +38,7 @@ function App() {
 		const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
 		setTurn(newTurn);
 		//revisar si hay un ganador
-		const newWinner = checkWinner(newBoard);
+		const newWinner = checkWinnerFrom(newBoard);
 		if (newWinner) {
 			confetti()
 			setWinner(newWinner);
