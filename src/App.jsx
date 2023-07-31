@@ -11,18 +11,13 @@ export default App;
 function App() {
 	const [board, setBoard] = useState(() => {
 		const boardFromStorage = window.localStorage.getItem('board')
-		if (boardFromStorage) {
-			return JSON.parse(boardFromStorage)
-		}
+		if (boardFromStorage) return JSON.parse(boardFromStorage)
 		return Array(9).fill(null)
 	});
 
 	const [turn, setTurn] = useState(() => {
 		const turnFromStorage = window.localStorage.getItem('turn')
-		if (turnFromStorage) {
-			return JSON.parse(turnFromStorage)
-		}
-		return TURNS.X
+		return turnFromStorage ?? TURNS.X
 	});
 
 	//null es que no hay ganador, false es que hay un empate
