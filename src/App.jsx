@@ -1,40 +1,35 @@
 import { useState } from "react";
 import confetti from "canvas-confetti";
-import { Square } from "./components/Square"
+import { Square } from "./components/Square";
 import { TURNS } from "./constants";
 import { WinnerModal } from "./components/WinnerModal";
 import { checkWinnerFrom, checkEndGame } from "./logic/board";
 
 export default App;
 
-
 function App() {
 	const [board, setBoard] = useState(() => {
-		const boardFromStorage = window.localStorage.getItem('board')
-		if (boardFromStorage) return JSON.parse(boardFromStorage)
-		return Array(9).fill(null)
+		const boardFromStorage = window.localStorage.getItem("board");
+		if (boardFromStorage) return JSON.parse(boardFromStorage);
+		return Array(9).fill(null);
 	});
 
 	const [turn, setTurn] = useState(() => {
-		const turnFromStorage = window.localStorage.getItem('turn')
-		return turnFromStorage ?? TURNS.X
+		const turnFromStorage = window.localStorage.getItem("turn");
+		return turnFromStorage ?? TURNS.X;
 	});
 
 	//null es que no hay ganador, false es que hay un empate
 	const [winner, setWinner] = useState(null);
-
-
 
 	const resetGame = () => {
 		setBoard(Array(9).fill(null));
 		setTurn(TURNS.X);
 		setWinner(null);
 
-		window.localStorage.removeItem('board')
-		window.localStorage.removeItem('turn')
+		window.localStorage.removeItem("board");
+		window.localStorage.removeItem("turn");
 	};
-
-
 
 	const updateBoard = index => {
 		//no actualizamos esta posicion
@@ -48,12 +43,12 @@ function App() {
 		const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
 		setTurn(newTurn);
 		//Guardar aquí partida
-		window.localStorage.setItem('board', JSON.stringify(newBoard))
-		window.localStorage.setItem('turn', newTurn)
+		window.localStorage.setItem("board", JSON.stringify(newBoard));
+		window.localStorage.setItem("turn", newTurn);
 		//revisar si hay un ganador
 		const newWinner = checkWinnerFrom(newBoard);
 		if (newWinner) {
-			confetti()
+			confetti();
 			setWinner(newWinner);
 		} else if (checkEndGame(newBoard)) {
 			setWinner(false); //empate
@@ -84,5 +79,3 @@ function App() {
 		</main>
 	);
 }
-
-
